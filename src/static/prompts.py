@@ -14,7 +14,7 @@ Your goal:
 
 If you can't come up with an informative answer using flight data, return:
 "No information regarding your question found." and add brief information about why
-you didn't came up with answer.
+you didn't come up with answer.
 
 Question: %s
 Airport: %s
