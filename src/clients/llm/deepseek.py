@@ -1,8 +1,7 @@
 import json
 
-from config.config import settings
-
 from src.clients.llm.abstract import AbstractLlmClient
+from config.config import settings
 
 
 class DeepSeekClient(AbstractLlmClient):
@@ -32,7 +31,7 @@ class DeepSeekClient(AbstractLlmClient):
         )
         try:
             result = response.json().get("choices")[0].get("message").get("content")
-        except Exception as exc:
+        except (KeyError, TypeError) as exc:
             result = "Failed to generate an answer. Try again later"
             # Proper logging could be implemented later
             print(f"Failed to generate an answer for prompt '{prompt}': {exc}")
