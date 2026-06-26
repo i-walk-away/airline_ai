@@ -1,7 +1,7 @@
 import json
 
-from src.clients.llm.abstract import AbstractLlmClient
 from config.config import settings
+from src.clients.llm.abstract import AbstractLlmClient
 
 
 class DeepSeekClient(AbstractLlmClient):

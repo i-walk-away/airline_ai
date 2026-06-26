@@ -1,7 +1,7 @@
-from config.config import settings
 from fastapi import FastAPI
 from uvicorn import Config, Server
 
+from config.config import settings
 from src.routes.flights import router as flights_router
 from src.routes.templates import router as template_router
 

@@ -1,7 +1,6 @@
 from typing import Literal
 
 from config.config import settings
-
 from src.clients.http.base import BaseHttpClient
 
 
