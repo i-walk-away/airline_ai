@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width,initial-scale=1" name="viewport"/>
+    <title>Airline AI | by i walk away</title>
+    <style>
+        :root{
+          --bg:#0b1020;
+          --card:#0f1724;
+          --muted:#98a0b3;
+          --accent:#6ee7b7;
+          --accent-2:#60a5fa;
+          --glass:rgba(255,255,255,0.03);
+          font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+        }
+
+        * { box-sizing: border-box; }
+
+        html,body{
+          min-height:100%;
+          margin:0;
+          background:linear-gradient(180deg,#05060a 0%,#07101b 100%) fixed;
+          color:#e6eef6;
+        }
+
+        .wrap{
+          min-height:100vh;
+          display:flex;
+          flex-direction:column;
+          align-items:center;
+          justify-content:flex-start;
+          padding:28px;
+        }
+
+        .hero{
+          text-align:center;
+          margin-bottom:40px;
+        }
+
+        .hero h1{
+          font-size:28px;
+          font-weight:700;
+          background:linear-gradient(90deg,var(--accent-2),var(--accent));
+          -webkit-background-clip:text;
+          -webkit-text-fill-color:transparent;
+          margin:0 0 10px 0;
+        }
+
+        .hero p{
+          color:var(--muted);
+          font-size:14px;
+          letter-spacing:0.5px;
+        }
+
+        .card{
+          width:100%;
+          max-width:900px;
+          border-radius:12px;
+          padding:24px;
+          background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));
+          box-shadow:0 8px 40px rgba(2,6,23,0.7);
+          border:1px solid rgba(255,255,255,0.04);
+          backdrop-filter:blur(6px);
+        }
+
+        label{
+          display:block;
+          font-size:13px;
+          color:var(--muted);
+          margin-bottom:6px;
+        }
+
+        select, textarea, button{
+          border:1px solid rgba(255,255,255,0.06);
+          background:var(--card);
+          color:#e6eef6;
+          border-radius:8px;
+          font-size:15px;
+          outline:none;
+          font-family:inherit;
+          width:100%;
+        }
+
+        select, textarea {
+          padding:12px 14px;
+          line-height:1.5;
+        }
+
+        select {
+          margin-bottom:12px;
+        }
+
+        textarea{
+          resize:vertical;
+          min-height:200px;
+          max-height:500px;
+        }
+
+        select:focus, textarea:focus{
+          box-shadow:0 0 0 3px rgba(96,165,250,0.12);
+          border-color:rgba(96,165,250,0.3);
+        }
+
+        button.primary{
+          background:linear-gradient(90deg,var(--accent-2),var(--accent));
+          color:#021023;
+          border:0;
+          font-weight:600;
+          cursor:pointer;
+          padding:10px 20px;
+          height:44px;
+          border-radius:8px;
+          font-size:15px;
+          margin-top:12px;
+        }
+
+        button:disabled{
+          opacity:0.5;
+          cursor:not-allowed;
+        }
+
+        .output{
+          margin-top:20px;
+          border-radius:10px;
+          padding:16px;
+          background:var(--glass);
+          border:1px solid rgba(255,255,255,0.03);
+          min-height:180px;
+          color:#dbe9f8;
+          font-size:15px;
+          line-height:1.5;
+          white-space:pre-wrap;
+        }
+
+        .meta{
+          display:flex;
+          justify-content:space-between;
+          align-items:center;
+          gap:8px;
+          margin-top:8px;
+          color:var(--muted);
+          font-size:12px;
+        }
+
+        .spinner{
+          width:18px;
+          height:18px;
+          border-radius:50%;
+          border:2px solid rgba(255,255,255,0.08);
+          border-top-color:var(--accent);
+          animation:spin 1s linear infinite;
+        }
+
+        @keyframes spin{to{transform:rotate(360deg);}}
+
+        .typing{
+          display:block;
+          height:6px;
+          width:100%;
+          background:linear-gradient(90deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02));
+          border-radius:6px;
+          overflow:hidden;
+          position:relative;
+          margin-top:10px;
+        }
+
+        .typing::after{
+          content:'';
+          position:absolute;
+          left:-30%;
+          top:0;
+          height:100%;
+          width:30%;
+          background:linear-gradient(90deg,rgba(255,255,255,0.03),rgba(255,255,255,0.09),rgba(255,255,255,0.03));
+          animation:slide 1.2s linear infinite;
+        }
+
+        @keyframes slide{to{left:110%;}}
+
+        footer{
+          margin-top:40px;
+          font-size:12px;
+          color:var(--muted);
+          text-align:center;
+        }
+
+        .output h1,.output h2,.output h3{margin:8px 0;font-weight:600;}
+        .output ul{list-style:disc;margin-left:20px;}
+        .output ol{list-style:decimal;margin-left:20px;}
+        .output code{background:rgba(255,255,255,0.08);padding:2px 5px;border-radius:4px;font-family:monospace;}
+        .output pre{background:rgba(255,255,255,0.05);padding:8px;border-radius:6px;overflow:auto;}
+        .output a{color:var(--accent-2);}
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <div class="hero">
+        <h1>Airline AI</h1>
+        <p>by i walk away</p>
+    </div>
+
+    <main aria-labelledby="title" class="card" role="main">
+        <form autocomplete="off" id="askForm" novalidate>
+            <label for="airport">Airport</label>
+            <select id="airport" name="airport" required>
+                <option value="">— Select an airport —</option>
+                <option value="DXB">DXB — Dubai</option>
+                <option value="LHR">LHR — London Heathrow</option>
+                <option value="CDG">CDG — Paris CDG</option>
+                <option value="SIN">SIN — Singapore Changi</option>
+                <option value="HKG">HKG — Hong Kong</option>
+                <option value="AMS">AMS — Amsterdam</option>
+            </select>
+
+            <label for="question">Question</label>
+            <textarea id="question" name="question" placeholder='Example: "Which flights are delayed today?"'
+                      required></textarea>
+
+            <button class="primary" disabled id="submitBtn" type="submit">Ask</button>
+
+            <div class="meta">
+                <div id="statusText">Ready</div>
+                <div id="lastUpdated">—</div>
+            </div>
+
+            <div aria-live="polite" class="output" id="output" role="status">
+                Enter a question and press "Ask" to get a response.
+            </div>
+        </form>
+    </main>
+
+    <footer>The appearance of this page was generated by an AI model. Sam Altman has more authorship over this HTML than
+        I do.
+    </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+    (function(){
+      const airport=document.getElementById('airport');
+      const question=document.getElementById('question');
+      const form=document.getElementById('askForm');
+      const submitBtn=document.getElementById('submitBtn');
+      const output=document.getElementById('output');
+      const statusText=document.getElementById('statusText');
+      const lastUpdated=document.getElementById('lastUpdated');
+
+      function updateSubmitState(){
+        submitBtn.disabled=!(airport.value.trim() && question.value.trim());
+      }
+
+      airport.addEventListener('change',updateSubmitState);
+      question.addEventListener('input',updateSubmitState);
+
+      function showLoading(){
+        statusText.textContent='Generating answer...';
+        output.innerHTML=`
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div class="spinner" aria-hidden="true"></div>
+            <div>
+              <div style="font-weight:600;color:var(--accent);">The answer is being generated...</div>
+              <div style="font-size:13px;color:var(--muted);margin-top:4px;">Please wait while the system analyzes flight data.</div>
+            </div>
+          </div>
+          <div class="typing" aria-hidden="true"></div>
+        `;
+      }
+
+      function showError(text){
+        statusText.textContent='Error';
+        output.textContent='Error: '+text;
+        lastUpdated.textContent=new Date().toLocaleString();
+      }
+
+      async function postAsk(payload){
+        const url='/ask';
+        const res=await fetch(url,{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify(payload)
+        });
+        if(!res.ok){
+          const txt=await res.text().catch(()=>res.statusText);
+          throw new Error(`${res.status} ${txt}`);
+        }
+        return res.json();
+      }
+
+      form.addEventListener('submit',async(ev)=>{
+        ev.preventDefault();
+        if(submitBtn.disabled)return;
+        submitBtn.disabled=true;
+        showLoading();
+
+        const payload={airport:airport.value,question:question.value.trim()};
+
+        try{
+          const data=await postAsk(payload);
+          const answer=(data&&data.answer)?data.answer.trim():null;
+          if(!answer){
+            output.textContent='The server returned an empty answer.';
+            statusText.textContent='Ready';
+          }else{
+            output.innerHTML=marked.parse(answer);
+            statusText.textContent='Answer ready';
+          }
+          lastUpdated.textContent=new Date().toLocaleString();
+        }catch(err){
+          console.error(err);
+          showError(err.message||'Unknown error');
+        }finally{
+          updateSubmitState();
+          submitBtn.disabled=false;
+        }
+      });
+
+      updateSubmitState();
+    })();
+</script>
+</body>
+</html>
