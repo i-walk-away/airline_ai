@@ -1,4 +1,6 @@
-# Aerline AI
+# Airline AI
+
+Choose an airport and ask your question. The model will generate an answer based on current flights. 
 
 ## Architecture of LLM integration
 
