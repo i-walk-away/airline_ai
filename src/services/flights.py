@@ -59,6 +59,7 @@ class FlightsService:
         """
         airport = raw_airport_data.get("airport")
         schedule = airport.get("pluginData").get("schedule")
+
         return schedule.get(mode).get("data")
 
     @staticmethod
