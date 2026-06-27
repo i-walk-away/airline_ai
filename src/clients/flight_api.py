@@ -27,4 +27,5 @@ class FlightApiClient(BaseHttpClient):
         }
 
         response = await self.get(url, params)
+
         return response.json()
